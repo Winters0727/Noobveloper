@@ -1,9 +1,10 @@
-const { postAccount, getAccountAll, getAccount, updateAccount, deleteAccount, login, isAdmin } = require('../../controller/account/account');
+const { postAccount, profileUpload, getAccountAll, getAccount, updateAccount, deleteAccount, login, isAdmin } = require('../../controller/account/account');
 
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 
-router.post('/', postAccount);
+router.post('/', profileUpload.single('profileImage'), postAccount);
 router.post('/login', login);
 
 router.get('/', getAccountAll);

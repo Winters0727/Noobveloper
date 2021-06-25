@@ -1,11 +1,27 @@
+const multer = require('multer');
+
 const { hashPassword, comparePassword } = require('../../utils/index');
 const { createToken, checkToken } = require('../../utils/jwt');
 
 const Account = require('../../models/account/account');
 
+const storage = multer.diskStorage(
+    {
+        destination: 'media/image/profile/',
+        filename: function ( req, file, cb ) {
+            cb( null, `${req.body['userName']}-profile.${file.originalname.split('.')[1]}`);
+        }
+    }
+);
+
+const profileUpload = multer({ storage : storage });
+
 const postAccount = async (req, res, next) => {
     try {
         const payload = {...req.body, 'userPassword': hashPassword(req.body['userPassword'])};
+        if (req.file) {
+            payload['profileImage'] = req.file.path;
+        }
         const account = await Account.create(payload);
         await res.status(201).json(account);
     }
@@ -117,4 +133,4 @@ const isAdmin = async (req, res, next) => {
     }
 }
 
-module.exports = { postAccount, getAccountAll, getAccount, updateAccount, deleteAccount, login, isAdmin };
+module.exports = { postAccount, profileUpload, getAccountAll, getAccount, updateAccount, deleteAccount, login, isAdmin };
