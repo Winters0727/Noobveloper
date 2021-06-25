@@ -39,6 +39,8 @@ mongoose.connect(process.env.DATABASE_URL, { useFindAndModify: false })
 })
 .catch(err => console.error(err));
 
+mongoose.Promise = global.Promise;
+
 /**
  * Normalize a port into a number, string, or false.
  */

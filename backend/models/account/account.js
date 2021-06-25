@@ -21,6 +21,10 @@ const accountSchema = new Schema({
         type: String,
         unique: true,
     },
+    userPoint: {
+        type: Number,
+        default: 0
+    },
     profileImage: {
         type: String,
         default: ''
@@ -34,6 +38,10 @@ const accountSchema = new Schema({
         type: Date,
         required: true,
         default: Date.now()
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 });
 
