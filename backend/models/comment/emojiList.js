@@ -10,7 +10,8 @@ const emojiListSchema = new Schema({
     },
     emojiListTitle : {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     emojiList : [{
         type: Schema.Types.ObjectId,
