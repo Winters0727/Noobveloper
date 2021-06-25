@@ -1,5 +1,5 @@
 const { hashPassword, comparePassword } = require('../../utils/index');
-const { createToken } = require('../../utils/jwt');
+const { createToken, checkToken } = require('../../utils/jwt');
 
 const Account = require('../../models/account/account');
 
@@ -73,14 +73,16 @@ const login = async (req, res, next) => {
     try {
         const { userId, userPassword } = req.body;
         const account = await Account.findOne({'userId': userId});
-        if (Object.keys(account).length > 0) {
+        if (account !== null && account !== undefined) {
             if (comparePassword(userPassword, account['userPassword'])) {
                 const payload = {
                     '_id': account['_id'],
                     'userName': account['userName'],
+                    'userPoint' : account['userPoint'],
                     'profileImage': account['profileImage'],
                 };
                 const result = createToken(payload);
+                res.cookie('token', result['token'])
                 await res.status(200).json(result);
             }
             else {
@@ -102,4 +104,17 @@ const login = async (req, res, next) => {
 
 // };
 
-module.exports = { postAccount, getAccountAll, getAccount, updateAccount, deleteAccount, login };
+const isAdmin = async (req, res, next) => {
+    try {
+        const data = checkToken(req, res).result;
+        const account = await Account.findById(data['_id']);
+        await res.status(200).json({'isAdmin' : account['isAdmin']});
+    }
+    
+    catch(err) {
+        console.error(err);
+        await res.status(500).json({'error' : err});
+    }
+}
+
+module.exports = { postAccount, getAccountAll, getAccount, updateAccount, deleteAccount, login, isAdmin };
