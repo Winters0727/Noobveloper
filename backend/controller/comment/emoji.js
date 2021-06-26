@@ -27,7 +27,6 @@ const emojiUpload = multer({ storage : storage });
 
 const postEmoji = async (req, res, next) => {
     try {
-        console.log(req.body);
         const emojiCheck = await EmojiList.find({'emojiListTitle' : req.body['emojiListTitle']});
         if (emojiCheck !== null || emojiCheck !== undefined) {
             res.status(400).json({

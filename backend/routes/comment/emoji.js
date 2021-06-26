@@ -3,7 +3,7 @@ const { postEmoji, emojiUpload, getEmojiAll, getEmoji, updateEmoji, deleteEmoji 
 const express = require('express');
 const router = express.Router();
 
-router.post('/', postEmoji, emojiUpload.array('emojis', 20));
+router.post('/', emojiUpload.array('emojis', 20), postEmoji);
 
 router.get('/', getEmojiAll);
 router.get('/:emojiId', getEmoji);

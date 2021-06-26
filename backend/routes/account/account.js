@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-router.post('/', postAccount, profileUpload.single('profileImage'));
+router.post('/', profileUpload.single('profileImage'), postAccount);
 router.post('/login', login);
 
 router.get('/', getAccountAll);

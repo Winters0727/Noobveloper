@@ -1,3 +1,4 @@
+const fs = require('fs');
 const multer = require('multer');
 
 const { hashPassword, comparePassword } = require('../../utils/index');
@@ -5,11 +6,16 @@ const { createToken, checkToken } = require('../../utils/jwt');
 
 const Account = require('../../models/account/account');
 
+let imageExt;
+
 const storage = multer.diskStorage(
     {
-        destination: 'media/image/profile/',
+        destination: function (req, file, cb) {
+            cb(null, 'media/image/profile/')
+          },
         filename: function ( req, file, cb ) {
-            cb( null, `${req.body['userName']}-profile.${file.originalname.split('.')[1]}`);
+            imageExt = file.originalname.split('.')[1];
+            cb( null, `undefined.${imageExt}`);
         }
     }
 );
@@ -20,7 +26,11 @@ const postAccount = async (req, res, next) => {
     try {
         const payload = {...req.body, 'userPassword': hashPassword(req.body['userPassword'])};
         if (req.file) {
-            payload['profileImage'] = req.file.path;
+            fs.rename(
+                `media/image/profile/undefined.${imageExt}`,
+                `media/image/profile/${req.body['userName']}-profile.${imageExt}`,
+                () => {});
+            payload['profileImage'] = `media/image/profile/${req.body['userName']}-profile.${imageExt}`;
         }
         const account = await Account.create(payload);
         await res.status(201).json(account);
