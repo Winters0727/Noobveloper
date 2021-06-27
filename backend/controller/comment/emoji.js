@@ -1,5 +1,8 @@
 const fs = require('fs');
+const path = require('path');
 const multer = require('multer');
+
+const { generateRandomString } = require('../../utils/index');
 
 const Emoji = require('../../models/comment/emoji');
 const EmojiList = require('../../models/comment/emojiList');
@@ -18,7 +21,8 @@ const storage = multer.diskStorage(
             })
         },
         filename: function ( req, file, cb ) {
-            cb( null, `${req.body['emojiListTitle']}-${Date.now()}.${file.originalname.split('.')[1]}`);
+            const salt = generateRandomString(10);
+            cb( null, `${req.body['emojiListTitle']}-${Date.now()}-${salt}.${path.extname(file.originalname)}`);
         }
     }
 );
@@ -28,23 +32,43 @@ const emojiUpload = multer({ storage : storage });
 const postEmoji = async (req, res, next) => {
     try {
         const emojiCheck = await EmojiList.find({'emojiListTitle' : req.body['emojiListTitle']});
-        if (emojiCheck !== null || emojiCheck !== undefined) {
-            res.status(400).json({
+        if (emojiCheck.length !== 0) {
+            await res.status(400).json({
                 'error' : 'Existed',
                 'message' : '이미 존재하는 이름입니다.'
             });
         }
 
-        const emojiList = await EmojiList.create(req.body);
-        req.files.map(async (file, index) => {
-            const emoji = await Emoji.create({
-                'emojiName' : `${req.body['emojiListTitle']}${index}`,
-                'emojiPath' : file.path
+        else {
+            const emojis = [];
+            const promiseList = req.files.map((file, index) => {
+                return new Promise(async (resolve, reject) => {
+                    let emojiKey = generateRandomString(30);
+                    while (true) {
+                    let emojiKeyCheck = await Emoji.find({'emojiKey' : emojiKey});
+                    if (emojiKeyCheck.length !== 0) {
+                        emojiKey = generateRandomString(30);
+                        continue
+                    }
+                    else {
+                        emojis.push(emojiKey);
+                        await Emoji.create({
+                            'emojiKey' : emojiKey,
+                            'emojiName' : `${req.body['emojiListTitle']}${index}`,
+                            'emojiPath' : file.path
+                        });
+                        break
+                      }
+                    }
+                    resolve();
+                    reject(new Error('Request is failed'));
+                })
             });
-            emojiList['emojiList'].push(emoji['_id']);
-        })
-        emojiList.save();
-        await res.status(201).json(emojiList);
+
+            await Promise.all(promiseList);
+            const emojiList = await EmojiList.create({...req.body, 'emojiList' : emojis})
+            await res.status(201).json(emojiList);
+        }
     }
 
     catch(err) {

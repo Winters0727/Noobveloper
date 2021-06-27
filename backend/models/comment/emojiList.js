@@ -14,8 +14,7 @@ const emojiListSchema = new Schema({
         unique: true
     },
     emojiList : [{
-        type: Schema.Types.ObjectId,
-        ref: 'Emoji',
+        type: String,
         default: []
     }],
     emojiPoint : {
