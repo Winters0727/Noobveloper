@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const multer = require('multer');
 
 const { hashPassword, comparePassword } = require('../../utils/index');
@@ -14,7 +15,7 @@ const storage = multer.diskStorage(
             cb(null, 'media/image/profile/')
           },
         filename: function ( req, file, cb ) {
-            imageExt = file.originalname.split('.')[1];
+            imageExt = path.extname(file.originalname);
             cb( null, `undefined.${imageExt}`);
         }
     }

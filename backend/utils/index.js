@@ -13,4 +13,14 @@ const checkEmail = function(email) {
     return regExp.test(email)
 }
 
-module.exports = { hashPassword, comparePassword, checkEmail }
+const generateRandomString = function(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+    const charactersLength = characters.length;
+    for (let counter=0; counter < length; counter++) {
+        result += characters[Math.floor(Math.random()*charactersLength)]
+    }
+    return result
+}
+
+module.exports = { hashPassword, comparePassword, checkEmail, generateRandomString }
