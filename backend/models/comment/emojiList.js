@@ -13,8 +13,14 @@ const emojiListSchema = new Schema({
         required: true,
         unique: true
     },
-    emojiList : [{
+    emojiDescription : {
         type: String,
+        required: true,
+        default : '이모티콘입니다.'
+    },
+    emojiList : [{
+        type: Schema.Types.ObjectId,
+        ref: 'Emoji',
         default: []
     }],
     emojiPoint : {

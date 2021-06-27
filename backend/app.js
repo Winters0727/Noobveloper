@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var fs = require('fs');
 
 var apiRouter = require('./routes/api');
 
@@ -19,6 +20,17 @@ app.use(cookieParser());
 app.use('/media', express.static(path.join(__dirname, 'media')));
 
 app.use(`/api/${process.env.VERSION}`, apiRouter);
+
+fs.readdir(__dirname, (err, files) => {
+  if (!('media' in files)) {
+    fs.mkdir(`${__dirname}/media`, async () => {
+      await fs.mkdir(`${__dirname}/media/image`, async () => {
+        await fs.mkdir(`${__dirname}/media/image/profile`, () => {});
+        await fs.mkdir(`${__dirname}/media/image/emoji`, () => {});
+      });
+    });
+  }
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
