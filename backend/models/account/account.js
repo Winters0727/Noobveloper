@@ -15,11 +15,11 @@ const accountSchema = new Schema({
     userName: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
     userEmail: {
         type: String,
-        unique: true,
+        default: ''
     },
     userPoint: {
         type: Number,
