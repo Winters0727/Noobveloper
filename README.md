@@ -10,3 +10,11 @@
 - Backend(Express.js)
   - 유저 및 게시글 모델 스키마, 컨트롤러, 루트 작성
   - 댓글 및 이모티콘 모델 스키마, 루트 작성
+
+
+
+### 추가 설명
+
+- ### [Database](./docs/Database.md)
+
+- ### [Endpoint](./docs/Endpoint.md)
