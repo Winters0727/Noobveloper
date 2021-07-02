@@ -77,7 +77,7 @@ const postEmoji = async (req, res, next) => {
         console.error(err);
         await res.status(500).json({
             ...ResponseObject['Server']['ServerError'],
-            'errorcode' : err
+            'error' : err
         });
     }
 };
@@ -96,7 +96,7 @@ const getEmojiAll = async (req, res, next) => {
         console.error(err);
         await res.status(500).json({
             ...ResponseObject['Server']['ServerError'],
-            'errorcode' : err
+            'error' : err
         });
     }
 };
@@ -115,7 +115,7 @@ const getEmoji = async (req, res, next) => {
         console.error(err);
         await res.status(500).json({
             ...ResponseObject['Server']['ServerError'],
-            'errorcode' : err
+            'error' : err
         });
     }
 
@@ -132,7 +132,7 @@ const updateEmoji = async (req, res, next) => {
         console.error(err);
         await res.status(500).json({
             ...ResponseObject['Server']['ServerError'],
-            'errorcode' : err
+            'error' : err
         });
     }
 };
@@ -147,7 +147,7 @@ const deleteEmoji = async (req, res, next) => {
         console.error(err);
         await res.status(500).json({
             ...ResponseObject['Server']['ServerError'],
-            'errorcode' : err
+            'error' : err
         });
     }
 };

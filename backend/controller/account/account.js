@@ -109,7 +109,7 @@ const login = async (req, res, next) => {
                     'profileImage': account['profileImage'],
                 };
                 const result = createToken(payload);
-                res.cookie('token', result['token'])
+                res.cookie('token', result['token']);
                 await res.status(200).json(result);
             }
             else {

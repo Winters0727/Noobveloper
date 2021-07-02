@@ -27,6 +27,10 @@ const emojiListSchema = new Schema({
         type: Number,
         default : 0
     },
+    isPassed : {
+        type: Boolean,
+        default : false
+    },
     createdAt: {
         type: Date,
         required: true,
