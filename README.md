@@ -2,8 +2,8 @@
 
 ### 뉴비(Newbie) + 개발자(Developer)를 위한 커뮤니티
 
-- Frontend(Vue + TypeScript)
-  - 미정(리액트로 바뀔 수도 있음.)
+- Frontend(React + TypeScript)
+  - Vue + TypeScript 사용 과정에서 타입 설정 에러가 많아서 리액트로 변경했습니다.
 
 
 
