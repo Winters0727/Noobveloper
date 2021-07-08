@@ -20,10 +20,10 @@ const issueSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Project'
     },
-    issueComment: {
+    issueComment: [{
         type: Schema.Types.ObjectId,
         ref: 'Comment'
-    },
+    }],
     createdAt: {
         type: Date,
         required: true,

@@ -1,3 +1,4 @@
+const ResponseObject = require('./response');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -18,14 +19,14 @@ const createToken = function(payload) {
 const verifyToken = function(inputToken, inputRefreshToken) {
     try {
         const result = jwt.verify(inputToken, process.env.JWT_SECRET); // JWT 토큰 검증에 성공하면 결과 반환
-        return {"result" : result}
+        return {"result" : true, "info" : result}
     } catch { // JWT 토큰 검증에 실패했다면
         try {
             const payload = jwt.verify(inputRefreshToken, process.env.JWT_REFRESH_SECRET); // 리프레시 토큰을 검증
             const { token, refreshToken } = createToken(payload) // 토큰 재생성 및 반환
-            return { "result" : result, "token" : token, "refreshToken" : refreshToken}
+            return { "result": true, "info" : result, "token" : token, "refreshToken" : refreshToken}
         } catch {
-            return {"tokenError" : "Unvalid token error"} // 리프레시 토큰 검증에 실패하면 문제가 있는 것
+            return {"result" : false, ...ResponseObject['ETC']['TokenError']} // 리프레시 토큰 검증에 실패하면 문제가 있는 것
         }
     }
 }
@@ -41,7 +42,7 @@ const checkToken = function(req, res) {
         }
         return verifyResult
     }
-    return {"tokenError" : "Unvalid token error"}
+    return {"result" : false, ...ResponseObject['ETC']['TokenError']}
 }
 
 module.exports = { createToken, verifyToken, checkToken }
