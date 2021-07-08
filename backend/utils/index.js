@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { checkToken } = require('./jwt')
 
 const hashPassword = function(password) {
     return bcrypt.hashSync(password, 10)
@@ -23,4 +24,9 @@ const generateRandomString = function(length) {
     return result
 }
 
-module.exports = { hashPassword, comparePassword, checkEmail, generateRandomString }
+const isTokenVerified = async function (req, res, next) {
+    const result = await checkToken(req, res)
+    return result["result"]
+}
+
+module.exports = { hashPassword, comparePassword, checkEmail, generateRandomString, isTokenVerified }

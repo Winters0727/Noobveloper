@@ -1,10 +1,10 @@
-const Article = require('../../models/article/article');
+const Issue = require('../../models/project/issue');
 
 const ResponseObject = require('../../utils/response');
 
-const postArticle = async (req, res, next) => {
+const postIssue = async (req, res, next) => {
     try {
-        await Article.create({...req.body});
+        await Issue.create({...req.body});
         await res.status(201).json({...ResponseObject['Success']['Created']});
     }
 
@@ -17,13 +17,13 @@ const postArticle = async (req, res, next) => {
     }
 };
 
-const getArticleAll = async (req, res, next) => {
+const getIssueAll = async (req, res, next) => {
     try {
         const options = req.query;
-        const articles = await Article.find(options);
+        const issues = await Issue.find(options);
         await res.status(200).json({
             ...ResponseObject['Success']['Success'],
-            'articles': articles
+            'issues' : issues
         });
     }
 
@@ -36,13 +36,13 @@ const getArticleAll = async (req, res, next) => {
     }
 };
 
-const getArticle = async (req, res, next) => {
+const getIssue = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        const article = await Article.findByIdAndUpdate(articleId, {$inc : { articleViewCount: 1 }});
+        const issueId = req.params['issueId'];
+        const issue = await Issue.findById(issueId);
         await res.status(200).json({
             ...ResponseObject['Success']['Success'],
-            'article': article
+            'issue' : issue
         });
     }
 
@@ -56,10 +56,10 @@ const getArticle = async (req, res, next) => {
 
 };
 
-const updateArticle = async (req, res, next) => {
+const updateIssue = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        await Article.findByIdAndUpdate(articleId, {...req.body, 'updatedAt' : Date.now()});
+        const issueId = req.params['issueId'];
+        await Issue.findByIdAndUpdate(issueId, {...req.body, 'updatedAt' : Date.now()});
         await res.status(200).json({...ResponseObject['Success']['Success']});
     }
 
@@ -72,13 +72,12 @@ const updateArticle = async (req, res, next) => {
     }
 };
 
-const deleteArticle = async (req, res, next) => {
+const deleteIssue = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        await Article.findByIdAndDelete(articleId);
+        const issueId = req.params['issueId'];
+        await Issue.findByIdAndDelete(issueId);
         await res.status(200).json({...ResponseObject['Success']['Success']});
     }
-
     catch(err) {
         console.error(err);
         await res.status(500).json({
@@ -88,4 +87,4 @@ const deleteArticle = async (req, res, next) => {
     }
 };
 
-module.exports = { postArticle, getArticleAll, getArticle, updateArticle, deleteArticle };
+module.exports = { postIssue, getIssueAll, getIssue, updateIssue, deleteIssue };

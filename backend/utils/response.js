@@ -11,6 +11,18 @@ const ResponseObject = {
             'message' : '데이터가 생성되었습니다.'
         }
     },
+    'Account' : {
+        'Account' : {
+            'code' : 3000,
+            'status' : '에러 : 계정없음',
+            'message' : '계정이 존재하지 않습니다.'
+        },
+        'Password' : {
+            'code' : 3001,
+            'status' : '에러 : 비밀번호 불일치',
+            'message' : '비밀번호가 일치하지 않습니다.'
+        }
+    },
     'Duplication' : {
         'Data' : {
             'code' : 4001,
@@ -40,6 +52,13 @@ const ResponseObject = {
             'code' : 5000,
             'status' : '에러 : 서버 에러',
             'message' : '요청 처리 중 문제가 발생했습니다.'
+        }
+    },
+    'ETC' : {
+        'TokenError' : {
+            'code' : 6000,
+            'status' : '에러 : 토큰 에러',
+            'message' : '토큰 검증 과정에서 문제가 발생했습니다.'
         }
     }
 };

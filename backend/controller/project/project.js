@@ -1,10 +1,10 @@
-const Article = require('../../models/article/article');
+const Project = require('../../models/project/project');
 
 const ResponseObject = require('../../utils/response');
 
-const postArticle = async (req, res, next) => {
+const postProject = async (req, res, next) => {
     try {
-        await Article.create({...req.body});
+        await Project.create({...req.body});
         await res.status(201).json({...ResponseObject['Success']['Created']});
     }
 
@@ -17,13 +17,13 @@ const postArticle = async (req, res, next) => {
     }
 };
 
-const getArticleAll = async (req, res, next) => {
+const getProjectAll = async (req, res, next) => {
     try {
         const options = req.query;
-        const articles = await Article.find(options);
+        const projects = await Project.find(options);
         await res.status(200).json({
             ...ResponseObject['Success']['Success'],
-            'articles': articles
+            'projects' : projects
         });
     }
 
@@ -36,13 +36,13 @@ const getArticleAll = async (req, res, next) => {
     }
 };
 
-const getArticle = async (req, res, next) => {
+const getProject = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        const article = await Article.findByIdAndUpdate(articleId, {$inc : { articleViewCount: 1 }});
+        const projectId = req.params['projectId'];
+        const project = await Project.findById(projectId);
         await res.status(200).json({
             ...ResponseObject['Success']['Success'],
-            'article': article
+            'project' : project
         });
     }
 
@@ -56,10 +56,10 @@ const getArticle = async (req, res, next) => {
 
 };
 
-const updateArticle = async (req, res, next) => {
+const updateProject = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        await Article.findByIdAndUpdate(articleId, {...req.body, 'updatedAt' : Date.now()});
+        const projectId = req.params['projectId'];
+        await Project.findByIdAndUpdate(projectId, {...req.body, 'updatedAt' : Date.now()});
         await res.status(200).json({...ResponseObject['Success']['Success']});
     }
 
@@ -72,13 +72,12 @@ const updateArticle = async (req, res, next) => {
     }
 };
 
-const deleteArticle = async (req, res, next) => {
+const deleteProject = async (req, res, next) => {
     try {
-        const articleId = req.params['articleId'];
-        await Article.findByIdAndDelete(articleId);
+        const projectId = req.params['projectId'];
+        await Project.findByIdAndDelete(projectId);
         await res.status(200).json({...ResponseObject['Success']['Success']});
     }
-
     catch(err) {
         console.error(err);
         await res.status(500).json({
@@ -88,4 +87,4 @@ const deleteArticle = async (req, res, next) => {
     }
 };
 
-module.exports = { postArticle, getArticleAll, getArticle, updateArticle, deleteArticle };
+module.exports = { postProject, getProjectAll, getProject, updateProject, deleteProject };

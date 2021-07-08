@@ -7,6 +7,8 @@ const { createToken, checkToken } = require('../../utils/jwt');
 
 const Account = require('../../models/account/account');
 
+const ResponseObject = require('../../utils/response');
+
 let imageExt;
 
 const storage = multer.diskStorage(
@@ -34,12 +36,15 @@ const postAccount = async (req, res, next) => {
             payload['profileImage'] = `media/image/profile/${req.body['userName']}-profile.${imageExt}`;
         }
         const account = await Account.create(payload);
-        await res.status(201).json(account);
+        await res.status(201).json({...ResponseObject['Success']['Created']});
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 };
 
@@ -47,12 +52,18 @@ const getAccountAll = async (req, res, next) => {
     try {
         const options = req.query;
         const accounts = await Account.find(options);
-        await res.status(200).json(accounts);
+        await res.status(200).json({
+            ...ResponseObject['Success']['Success'],
+            'accounts': accounts
+        });
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 };
 
@@ -60,12 +71,18 @@ const getAccount = async (req, res, next) => {
     try {
         const accountId = req.params['accountId'];
         const account = await Account.findById(accountId);
-        await res.status(200).json(account);
+        await res.status(200).json({
+            ...ResponseObject['Success']['Success'],
+            'account': account
+        });
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 
 };
@@ -74,12 +91,15 @@ const updateAccount = async (req, res, next) => {
     try {
         const accountId = req.params['accountId'];
         await Account.findByIdAndUpdate(accountId, {...req.body, 'updatedAt' : Date.now()});
-        await res.status(200).json({'status' : 'success'});
+        await res.status(200).json({...ResponseObject['Success']['Success']});
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 };
 
@@ -87,12 +107,15 @@ const deleteAccount = async (req, res, next) => {
     try {
         const accountId = req.params['accountId'];
         await Account.findByIdAndDelete(accountId);
-        await res.status(200).json({'status' : 'success'});
+        await res.status(200).json({...ResponseObject['Success']['Success']});
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 };
 
@@ -110,20 +133,30 @@ const login = async (req, res, next) => {
                 };
                 const result = createToken(payload);
                 res.cookie('token', result['token']);
-                await res.status(200).json(result);
+                await res.status(200).json({
+                    ...ResponseObject['Success']['Success'],
+                    'result': result
+                });
             }
             else {
-                await res.status(401).json({'message': '비밀번호가 일치하지 않습니다!'});
+                await res.status(401).json({
+                    ...ResponseObject['Account']['Password'],
+                });
             }
         }
         else {
-            await res.status(404).json({'message': '유저가 존재하지 않습니다!'});
+            await res.status(404).json({
+                ...ResponseObject['Account']['Account'],
+            });
         }
     }
 
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error': err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 };
 
@@ -135,12 +168,18 @@ const isAdmin = async (req, res, next) => {
     try {
         const data = checkToken(req, res).result;
         const account = await Account.findById(data['_id']);
-        await res.status(200).json({'isAdmin' : account['isAdmin']});
+        await res.status(200).json({
+            ...ResponseObject['Success']['Success'],
+            'isAdmin': account['isAdmin']
+        });
     }
     
     catch(err) {
         console.error(err);
-        await res.status(500).json({'error' : err});
+        await res.status(500).json({
+            ...ResponseObject['Server']['ServerError'],
+            'error' : err
+        });
     }
 }
 
