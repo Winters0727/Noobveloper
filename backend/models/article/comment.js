@@ -17,6 +17,10 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
+    commentDepth : {
+        type: Number,
+        required: true
+    },
     commentLikes : [{
         type: Schema.Types.ObjectId,
         ref: 'Account',

@@ -35,7 +35,7 @@ const postAccount = async (req, res, next) => {
                 () => {});
             payload['profileImage'] = `media/image/profile/${req.body['userName']}-profile.${imageExt}`;
         }
-        const account = await Account.create(payload);
+        await Account.create(payload);
         await res.status(201).json({...ResponseObject['Success']['Created']});
     }
 
