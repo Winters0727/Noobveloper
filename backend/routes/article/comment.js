@@ -1,4 +1,4 @@
-const { postComment, getCommentAll, updateComment, deleteComment } = require('../../controller/comment/comment');
+const { postComment, getCommentAll, updateComment, deleteComment } = require('../../controller/article/comment');
 
 const express = require('express');
 const router = express.Router();
