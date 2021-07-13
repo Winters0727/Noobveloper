@@ -8,4 +8,9 @@ router.use('/account', require('./account/account'));
 
 router.use('/emoji', require('./comment/emoji'));
 
+if (process.env.NODE_ENV !== 'production') {
+    const { swaggerUi, specs } = require('../utils/swagger');
+    router.use('/swagger', swaggerUi.serve, swaggerUi.setup(specs))
+}
+
 module.exports = router;

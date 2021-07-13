@@ -1,4 +1,4 @@
-const Comment = require('../../models/comment/comment');
+const Comment = require('../../models/article/comment');
 
 const ResponseObject = require('../../utils/response');
 

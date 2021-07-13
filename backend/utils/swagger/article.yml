@@ -1,0 +1,48 @@
+/**
+* 
+* @swagger
+*     components:
+*         schemas:
+*             Article:
+*                 type: object
+*                 required:
+*                     - articleWriter
+*                     - articleTitle
+*                     - articleContent
+*                 properties:
+*                     articleWriter:
+*                         type: objectid
+*                         description: 사용자의 Mongo DB ObjectId
+*                     articleTitle:
+*                         type: string
+*                         description: 글 제목
+*                     articleContent:
+*                         type: string
+*                         description: 글 내용
+*                     articleViewCount:
+*                         type: number
+*                         description: 글 조회수
+*                     articleLikes:
+*                         type: array
+*                         description: 글 좋아요(사용자의 Mongo DB ObjectId)
+*                     createdAt:
+*                         type: string
+*                         format: date
+*                         description: 글 생성 날짜
+*                     updatedAt:
+*                         type: string
+*                         format: date
+*                         description: 글 수정 날짜
+*/
+
+/**
+* @swagger 
+*   /product: 
+*     get: 
+*       responses: 
+*       200: 
+*       description: 제품 조회 성공 // 아래 schema 추가 
+*       schema: 
+*         $ref: '../../models/article/article' 
+*/ 
+router.get('/', getList);
